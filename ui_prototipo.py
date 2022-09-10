@@ -36,7 +36,7 @@ class Criptografia(tk.Tk):
         self.criptografia["values"] = [
             "Criptografia 1", "Criptografia 2", "Criptografia 3"]
         self.criptografia["state"] = "readonly"
-        self.criptografia.pack(fill=tk.BOTH, expand=True, padx= 10, pady=10)
+        self.criptografia.pack(fill=tk.BOTH, expand=True, **config)
 
         return frame
 

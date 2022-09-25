@@ -12,17 +12,17 @@ def gerar_fluxo(chave: str) -> list[int]:
 
     return fluxo
 
-def cifra(chave: str, msg: str) -> list[int]:
+def cifra(chave: str, mensagem: str) -> list[int]:
     """Aplica a cifra RC4 na mensagem usando o fluxo da chave"""
     fluxo = gerar_fluxo(chave)
     msg_cifrada = []
     j = k = 0
     
-    for i in range(len(msg)):
+    for i in range(len(mensagem)):
         j = (j + 1) % 256
         k = (k + fluxo[j]) % 256
         fluxo[j], fluxo[k] = (fluxo[k], fluxo[j])
-        msg_cifrada.append(fluxo[(fluxo[j] + fluxo[k]) % 256] ^ msg[i]) 
+        msg_cifrada.append(fluxo[(fluxo[j] + fluxo[k]) % 256] ^ mensagem[i]) 
     
     return msg_cifrada
 
@@ -35,10 +35,8 @@ def criptografar(chave: str, mensagem: str) -> str:
 
 def descriptografar(chave: str, mensagem: str) -> str:
     mensagem = formatar_entrada(mensagem)
-    mensagem = [ord(c) for c in mensagem]
-    cifrado = cifra(chave, mensagem)
     
-    descriptografado = "".join(map(chr, cifrado))
+    descriptografado = criptografar(chave, mensagem)
     return descriptografado
 
 def menu_principal() -> int:
@@ -59,7 +57,7 @@ def validar_input(mensagem) -> str:
     """Valida o input do usuário"""
     entrada = input(mensagem)
     while not entrada:
-        print("Entrada invalida")
+        print("Entrada inválida")
         entrada = input(mensagem)
     
     return entrada

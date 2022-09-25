@@ -2,7 +2,7 @@ from os import system
 
 def gerar_fluxo(chave: str) -> list[int]:
     """Gera o fluxo da chave"""
-    chave = [ord(c) for c in chave]
+    chave = [ord(char) for char in chave]
     fluxo = [n for n in range(256)]
     j = 0
 
@@ -22,21 +22,25 @@ def cifra(chave: str, mensagem: str) -> list[int]:
         j = (j + 1) % 256
         k = (k + fluxo[j]) % 256
         fluxo[j], fluxo[k] = (fluxo[k], fluxo[j])
-        msg_cifrada.append(fluxo[(fluxo[j] + fluxo[k]) % 256] ^ mensagem[i]) 
+        c = (fluxo[(fluxo[j] + fluxo[k]) % 256] ^ mensagem[i])
+        msg_cifrada.append(c) 
     
     return msg_cifrada
 
 def criptografar(chave: str, mensagem: str) -> str:
-    mensagem = [ord(c) for c in mensagem]
+    """Criptografa a mensagem utilizando a chave escolhida"""
+    mensagem = [ord(char) for char in mensagem]
     cifrado = cifra(chave, mensagem)
-    
     criptografado = "".join(map(chr, cifrado))
+
     return criptografado
 
 def descriptografar(chave: str, mensagem: str) -> str:
+    """Descriptografa a mensagem utilizando a chave escolhida, 
+    checando por caracteres não printáveis em sua representação canônica (hex)"""
     mensagem = formatar_entrada(mensagem)
-    
     descriptografado = criptografar(chave, mensagem)
+
     return descriptografado
 
 def menu_principal() -> int:
@@ -53,7 +57,7 @@ def menu_principal() -> int:
     
     return int(entrada)
 
-def validar_input(mensagem) -> str:
+def validar_input(mensagem: str) -> str:
     """Valida o input do usuário"""
     entrada = input(mensagem)
     while not entrada:
@@ -63,12 +67,12 @@ def validar_input(mensagem) -> str:
     return entrada
 
 def formatar_entrada(entrada: str) -> str:
-    """Em caso de a entrada tiver caracteres em sua representação hexadecimal"""
+    """Em caso de a entrada tiver caracteres em sua representação canônica"""
     return entrada.encode("raw_unicode_escape").decode("unicode_escape")
 
 def formatar_saida(saida: str) -> str:
     """Em caso de a saída tiver caracteres não printáveis,
-    troca os caracteres não printáveis por sua representação hexadecimal"""
+    troca os caracteres não printáveis por sua representação canônica (hex)"""
     return repr(saida)[1:-1]
 
 if __name__ == "__main__":

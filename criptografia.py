@@ -1,84 +1,97 @@
 from os import system
 
-def converter(mensagem: str):
-    # return mensagem.encode("utf-8").decode("utf-8")
-    return mensagem.encode("raw_unicode_escape").decode("unicode_escape")
-
-def criar_fluxo(chave):
+def gerar_fluxo(chave: str) -> list[int]:
+    """Gera o fluxo da chave"""
     chave = [ord(c) for c in chave]
     fluxo = [n for n in range(256)]
-
     j = 0
+
     for i in range(256):
         j = (j + fluxo[i] + chave[i % len(chave)]) % 256
-        fluxo[i], fluxo[j] = fluxo[j], fluxo[i]
+        fluxo[i], fluxo[j] = (fluxo[j], fluxo[i])
 
     return fluxo
 
-def cifra(chave, msg):
-    fluxo = criar_fluxo(chave)
-    cifrada = []
-
+def cifra(chave: str, msg: str) -> list[int]:
+    """Aplica a cifra RC4 na mensagem usando o fluxo da chave"""
+    fluxo = gerar_fluxo(chave)
+    msg_cifrada = []
     j = k = 0
     
     for i in range(len(msg)):
         j = (j + 1) % 256
         k = (k + fluxo[j]) % 256
         fluxo[j], fluxo[k] = (fluxo[k], fluxo[j])
-        cifrada.append(fluxo[(fluxo[j] + fluxo[k]) % 256] ^ msg[i]) 
+        msg_cifrada.append(fluxo[(fluxo[j] + fluxo[k]) % 256] ^ msg[i]) 
     
-    return cifrada
+    return msg_cifrada
 
-def criptografia(chave, mensagem):
-    msg = [ord(c) for c in mensagem]
-    print(msg)
-    cifrado = cifra(chave, msg)
+def criptografar(chave: str, mensagem: str) -> str:
+    mensagem = [ord(c) for c in mensagem]
+    cifrado = cifra(chave, mensagem)
     
-    cifrado = "".join(map(chr, cifrado))
-    return cifrado
+    criptografado = "".join(map(chr, cifrado))
+    return criptografado
 
-def descriptografia(chave, mensagem):
-    mensagem = converter(mensagem)
-    msg = [ord(c) for c in mensagem]
-    cifrado = cifra(chave, msg)
+def descriptografar(chave: str, mensagem: str) -> str:
+    mensagem = formatar_entrada(mensagem)
+    mensagem = [ord(c) for c in mensagem]
+    cifrado = cifra(chave, mensagem)
     
-    cifrado = "".join(map(chr, cifrado))
-    return cifrado
+    descriptografado = "".join(map(chr, cifrado))
+    return descriptografado
 
-def validar_input(msg):
-    entrada = input(msg)
-    while not entrada:
-        print("Entrada invalida")
-        entrada = input(msg)
-    
-    return entrada
-
-def formatar_saida(saida):
-    return repr(saida)
-
-system('cls')
-CRIPTOGRAFIA = 1
-DESCRIPTOGRAFIA = 2
-while True:
+def menu_principal() -> int:
+    """Exibe as opções válidas e garante que o input seja válido"""
     print("Menu principal")
     print("[1] Criptografar")
     print("[2] Descriptografar")
     print("[3] Sair")
-    opcao = int(input("? "))
-    if opcao in (1,2,3):
-        if opcao == CRIPTOGRAFIA:
-            chave = validar_input("Digite a chave:")
-            mensagem = validar_input("Digite a mensagem:")
-            criptografada = criptografia(chave, mensagem)
-            print(formatar_saida(criptografada))
-            
-        elif opcao == DESCRIPTOGRAFIA:
-            chave = validar_input("Digite a chave:")
-            mensagem = validar_input("Digite a mensagem:")
-            descriptografada = descriptografia(chave, mensagem)
-            print(formatar_saida(descriptografada))
+
+    entrada = input(">>> ")
+    while entrada not in ("1", "2", "3"):
+        print("Entrada inválida")
+        entrada = input(">>> ")
+    
+    return int(entrada)
+
+def validar_input(mensagem) -> str:
+    """Valida o input do usuário"""
+    entrada = input(mensagem)
+    while not entrada:
+        print("Entrada invalida")
+        entrada = input(mensagem)
+    
+    return entrada
+
+def formatar_entrada(entrada: str) -> str:
+    """Em caso de a entrada tiver caracteres em sua representação hexadecimal"""
+    return entrada.encode("raw_unicode_escape").decode("unicode_escape")
+
+def formatar_saida(saida: str) -> str:
+    """Em caso de a saída tiver caracteres não printáveis,
+    troca os caracteres não printáveis por sua representação hexadecimal"""
+    return repr(saida)[1:-1]
+
+if __name__ == "__main__":
+    CRIPTOGRAFAR = 1
+    DESCRIPTOGRAFAR = 2
+    SAIR = 3
+
+    system('cls')
+    
+    while True:
+        opcao = menu_principal()
+        if opcao != SAIR:
+            chave = validar_input("Digite a chave:\n")
+            mensagem = validar_input("Digite a mensagem:\n")
+            if opcao == CRIPTOGRAFAR:
+                saida = criptografar(chave, mensagem)
+                print("Mensagem criptografada:")
+            elif opcao == DESCRIPTOGRAFAR:
+                saida = descriptografar(chave, mensagem)
+                print("Mensagem descriptografada:")
+
+            print(formatar_saida(saida))
         else:
             break
-    else:
-        print("Entrada inválida")
-        continue

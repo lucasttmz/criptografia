@@ -11,7 +11,7 @@ def gerar_fluxo(chave: str) -> list[int]:
 
     return fluxo
 
-def cifra(fluxo: list[int], mensagem: str) -> list[int]:
+def cifra(fluxo: list[int], mensagem: list[int]) -> list[int]:
     msg_cifrada = []
     j = k = 0
     
@@ -72,19 +72,20 @@ if __name__ == "__main__":
     SAIR = 3
 
     system('cls')
-    
-    while True:
-        opcao = menu_principal()
-        if opcao != SAIR:
-            chave = validar_input("Digite a chave:\n")
-            mensagem = validar_input("Digite a mensagem:\n")
-            if opcao == CRIPTOGRAFAR:
-                saida = criptografar(chave, mensagem)
-                print("Mensagem criptografada:")
-            elif opcao == DESCRIPTOGRAFAR:
-                saida = descriptografar(chave, mensagem)
-                print("Mensagem descriptografada:")
+    opcao = menu_principal()
+    while opcao != SAIR:
+        system('cls')
+        print(("Criptografia", "Descriptografia")[opcao-1])
+        chave = validar_input("Digite a chave:\n")
+        mensagem = validar_input("Digite a mensagem:\n")
+        if opcao == CRIPTOGRAFAR:
+            saida = criptografar(chave, mensagem)
+            print("Mensagem criptografada:")
+        elif opcao == DESCRIPTOGRAFAR:
+            saida = descriptografar(chave, mensagem)
+            print("Mensagem descriptografada:")
 
-            print(formatar_saida(saida))
-        else:
-            break
+        print(formatar_saida(saida))
+        input()
+        system('cls')
+        opcao = menu_principal()

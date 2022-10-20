@@ -89,3 +89,29 @@ if __name__ == "__main__":
         input()
         system('cls')
         opcao = menu_principal()
+
+    # system('cls')
+    # opcao = menu_principal()
+    # while opcao != SAIR:
+    #     system('cls')
+    #     if opcao == CRIPTOGRAFAR:
+    #         print("Criptografar")
+    #         chave = validar_input("Digite a chave:\n")
+    #         mensagem = validar_input("Digite a mensagem:\n")
+    #         saida = criptografar(chave, mensagem)
+    #         print("Mensagem criptografada:")
+    #     elif opcao == DESCRIPTOGRAFAR:
+    #         print("Descriptografar")
+    #         chave = validar_input("Digite a chave:\n")
+    #         mensagem = validar_input("Digite a mensagem:\n")
+    #         saida = descriptografar(chave, mensagem)
+    #         print("Mensagem descriptografada:")
+
+    #     print(formatar_saida(saida))
+    #     input()
+    #     system('cls')
+    #     opcao = menu_principal()
+
+    
+    
+

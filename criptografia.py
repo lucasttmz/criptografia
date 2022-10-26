@@ -71,11 +71,13 @@ if __name__ == "__main__":
     DESCRIPTOGRAFAR = 2
     SAIR = 3
 
+    OP = ("Criptografia", "Descriptografia")
+
     system('cls')
     opcao = menu_principal()
     while opcao != SAIR:
         system('cls')
-        print(("Criptografia", "Descriptografia")[opcao-1])
+        print(OP[opcao-1])
         chave = validar_input("Digite a chave:\n")
         mensagem = validar_input("Digite a mensagem:\n")
         if opcao == CRIPTOGRAFAR:
@@ -89,29 +91,4 @@ if __name__ == "__main__":
         input()
         system('cls')
         opcao = menu_principal()
-
-    # system('cls')
-    # opcao = menu_principal()
-    # while opcao != SAIR:
-    #     system('cls')
-    #     if opcao == CRIPTOGRAFAR:
-    #         print("Criptografar")
-    #         chave = validar_input("Digite a chave:\n")
-    #         mensagem = validar_input("Digite a mensagem:\n")
-    #         saida = criptografar(chave, mensagem)
-    #         print("Mensagem criptografada:")
-    #     elif opcao == DESCRIPTOGRAFAR:
-    #         print("Descriptografar")
-    #         chave = validar_input("Digite a chave:\n")
-    #         mensagem = validar_input("Digite a mensagem:\n")
-    #         saida = descriptografar(chave, mensagem)
-    #         print("Mensagem descriptografada:")
-
-    #     print(formatar_saida(saida))
-    #     input()
-    #     system('cls')
-    #     opcao = menu_principal()
-
-    
-    
 
